@@ -48,7 +48,7 @@ const register = async (req, res) => {
         if (result[0].result.affectedRows === 1) {
             //obtenemos el id del usuario
             const resultId = result[0].result.insertId;
-            
+
             //Creamos el album de fotos de perfil
             const resultAlbum = await consult(`insert into album (nombre,usuario_id) values ('Fotos de perfil', ${resultId});`);
             if (resultAlbum[0].result.affectedRows !== 1) {
@@ -63,7 +63,7 @@ const register = async (req, res) => {
             if (resultFoto[0].result.affectedRows !== 1) {
                 return res.status(500).json({ status: 500, message: "Error al crear foto de perfil" });
             }
-            
+
             return res.status(200).json({ status: 200, message: "Usuario registrado correctamente" });
         } else {
             return res.status(500).json({ status: 500, message: "Error al registrar el usuario" });
@@ -74,7 +74,47 @@ const register = async (req, res) => {
     }
 };
 
+const login = async (req, res) => {
+    const { identifier, password } = req.body; //identifier puede ser el email o el nombre de usuario
+    try {
+        if (identifier === undefined || password === undefined) {
+            return res.status(400).json({ status: 400, message: "Faltan campos por rellenar" });
+        }
+
+        //buscamos al usuario
+        const result = await consult(`select * from usuario where correo='${identifier}' or nombre='${identifier}';`);
+
+        if (result[0].result.length === 0) {
+            return res.status(404).json({ status: 404, message: "Usuario no encontrado" });
+        }
+
+        if (result[0].status == 200 && result[0].result.length > 0) {
+            const user = result[0].result[0];
+
+            //comparamos la contraseña
+            if (!bcrypt.compareSync(password, user.password)) {
+                return res.status(401).json({ status: 401, message: "Contraseña incorrecta" });
+            }
+
+            //si todo está correcto
+            const dataUser = {
+                id: user.id,
+                username: user.nombre,
+                email: user.correo,
+                url_foto: user.url_foto
+            };
+
+            return res.status(200).json({ status: 200, message: "Usuario logueado correctamente", data_user: dataUser });
+        }
+        const errorBd = result[0].error;
+        return res.status(500).json({ status: 500, message: "Error al iniciar sesión. " + errorBd });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ status: 500, message: "Error al iniciar sesión," + err });
+    }
+};
 
 export const user = {
-    register
+    register,
+    login
 };

@@ -11,5 +11,6 @@ router.get("/check", async (req, res) => {
 
 // Rutas de usuario
 router.post("/user/register", user.register);
+router.post("/user/login_credentials", user.login);
 
 export default router;

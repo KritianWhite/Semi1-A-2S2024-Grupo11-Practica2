@@ -11,10 +11,10 @@ const iconos = {
     'log-out': <LogOut className="me-2" />
 };
 
-const Funcionalidad = ({ icon, texto, link }) => {
+const Funcionalidad = ({ icon, texto, link, action, onClick }) => {
     return (
         <>
-            <Button variant="outline-dark" className="w-100 mb-3 d-flex align-items-center" href={link}>
+            <Button variant="outline-dark" className="w-100 mb-3 d-flex align-items-center" href={link} onClick={onClick}>
                 {iconos[icon]}
                 {texto}
             </Button>
