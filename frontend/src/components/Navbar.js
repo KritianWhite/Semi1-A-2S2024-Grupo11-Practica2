@@ -1,6 +1,12 @@
 import React from 'react';
 
-function Navbar() {
+function Navbar({showNavBar}) {
+
+    if (!showNavBar) {
+        return null;
+    }
+
+    
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">

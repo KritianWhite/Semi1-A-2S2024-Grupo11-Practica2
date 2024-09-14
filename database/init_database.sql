@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `photobucket`.`imagen` (
   `nombre` VARCHAR(100) NOT NULL,
   `url_s3` VARCHAR(255) NOT NULL,
   `descripcion` VARCHAR(255) NOT NULL,
+  `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   INDEX `fk_imagen_album1_idx` (`album_id` ASC) VISIBLE,
   CONSTRAINT `fk_imagen_album1`

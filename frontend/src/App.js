@@ -38,9 +38,9 @@ function Layout({ isAuthenticated, setIsAuthenticated }) {
             <Routes>
               <Route path="/inicio-sesion" element={<InicioSesion setIsAuthenticated={setIsAuthenticated} />} />
               <Route path="/registro-usuario" element={<RegistroUsuario />} />
-              <Route path="/pagina-inicio" element={<PaginaInicio />} />
-              <Route path="/configuracion-cuenta" element={<ConfiguracionCuenta />} />
-              <Route path="/vista-album" element={<VistaAlbum />} />
+              <Route path="/pagina-inicio" element={<PaginaInicio showNavBar={true}/>} />
+              <Route path="/configuracion-cuenta" element={<ConfiguracionCuenta showNavBar={true} />} />
+              <Route path="/vista-album" element={<VistaAlbum showNavBar={true}/>} />
               {/* Otras rutas que necesitan autenticación */}
               <Route path="*" element={<Navigate to="/inicio-sesion" />} />
             </Routes>

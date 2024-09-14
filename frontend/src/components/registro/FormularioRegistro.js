@@ -1,7 +1,8 @@
 import React from 'react';
-import { Camera } from 'react-bootstrap-icons';
+import { Camera, XCircle } from 'react-bootstrap-icons';
+import { Col } from 'react-bootstrap';
 
-const FormularioRegistro = ({ formData, handleChange, handleImageChange, handleSubmit }) => {
+const FormularioRegistro = ({ formData, handleChange, handleImageChange, handleSubmit, handleClearImage }) => {
     return (
         <form onSubmit={handleSubmit}>
             <div className="mb-3">
@@ -53,7 +54,17 @@ const FormularioRegistro = ({ formData, handleChange, handleImageChange, handleS
                 />
             </div>
             <div className="mb-3">
+
                 <label htmlFor="profileImage" className="form-label">Imagen de perfil</label>
+                <Col className="text-center mb-2 mt-1">
+                    <div className='image-container'>
+                        <img
+                            src={formData.profileImage || "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="}
+                            alt="Profile"
+                            style={{ width: '50%', aspectRatio: '1/1', borderRadius: '50%' }}
+                        />
+                    </div>
+                </Col>
                 <div className="d-flex align-items-center">
                     <input
                         type="file"
@@ -62,6 +73,7 @@ const FormularioRegistro = ({ formData, handleChange, handleImageChange, handleS
                         onChange={handleImageChange}
                         className="form-control-file"
                         style={{ display: 'none' }}
+                        accept='image/*'
                     />
                     <button
                         type="button"
@@ -71,9 +83,18 @@ const FormularioRegistro = ({ formData, handleChange, handleImageChange, handleS
                         <Camera className="me-2" /> Subir imagen
                     </button>
                     {formData.profileImage && (
-                        <span className="ms-3 text-muted">
-                            {formData.profileImage.name}
-                        </span>
+                        <div className="d-flex align-items-center">
+                            <span className="ms-3 text-muted">
+                                {formData.nameImage}
+                            </span>
+                            <div
+                                type="button"
+                                className=" btn-outline-danger ms-2"
+                                onClick={() => handleClearImage()}
+                            >
+                                <XCircle className='text-danger' />
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>
