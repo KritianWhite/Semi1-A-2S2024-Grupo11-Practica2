@@ -1,17 +1,11 @@
-import React, {useEffect}from 'react';
+import React, {useEffect, useState}from 'react';
 import { useNavigate } from 'react-router-dom';
 import PerfilUsuario from '../components/paginaInicio/PerfilUsuario';
 import Funcionalidad from '../components/paginaInicio/Funcionalidad';
 import {logout, getLocalStorage} from '../session';
 
-// Datos de usuario simulados
-const usuario = {
-    nombre: "Ana García",
-    email: "ana.garcia@ejemplo.com",
-    imgPerfil: "/api/placeholder/150/150"
-};
-
 const PaginaInicio = () => {
+    const [usuario, setUsuario] = useState({});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +14,8 @@ const PaginaInicio = () => {
             logout();
             navigate('/inicio-sesion');
         }
-    }
+        setUsuario(data_user);
+    }, []
     );
 
     const handleLogout = (e) => {

@@ -1,4 +1,3 @@
-
 import config from "../config.mjs";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
@@ -25,6 +24,8 @@ const uploadImageS3 = async (buff, path) => {
     } catch (error) {
       console.error(error);
       return null;
+    }finally{
+      client.destroy();
     }
   };
 
