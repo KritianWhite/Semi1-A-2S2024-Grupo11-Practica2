@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FormularioRegistro from '../components/registro/FormularioRegistro';
 import axios from 'axios';
 import api_uri from '../config';
 import Alertas from '../components/Alertas';
 import Spinner from 'react-bootstrap/Spinner';
+import { getLocalStorage } from '../session';
 
 const RegistroUsuario = () => {
     const [formData, setFormData] = useState({
@@ -16,6 +18,14 @@ const RegistroUsuario = () => {
     });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const data_user = getLocalStorage('data_user');
+        if(data_user) {
+            navigate('/pagina-inicio');
+        }
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
