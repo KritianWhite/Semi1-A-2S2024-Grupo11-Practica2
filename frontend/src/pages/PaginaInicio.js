@@ -1,16 +1,29 @@
-import React from 'react';
-
+import React, {useEffect, useState}from 'react';
+import { useNavigate } from 'react-router-dom';
 import PerfilUsuario from '../components/paginaInicio/PerfilUsuario';
 import Funcionalidad from '../components/paginaInicio/Funcionalidad';
-
-// Datos de usuario simulados
-const usuario = {
-    nombre: "Ana García",
-    email: "ana.garcia@ejemplo.com",
-    imgPerfil: "/api/placeholder/150/150"
-};
+import {logout, getLocalStorage} from '../session';
 
 const PaginaInicio = () => {
+    const [usuario, setUsuario] = useState({});
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const data_user = getLocalStorage('data_user');
+        if(!data_user) {
+            logout();
+            navigate('/inicio-sesion');
+        }
+        setUsuario(data_user);
+    }, []
+    );
+
+    const handleLogout = (e) => {
+        console.log('Cerrando sesión...');
+        logout();
+        navigate('/inicio-sesion');
+    }
+
     return (
         <>
             <div className="col-md-8">
@@ -32,7 +45,7 @@ const PaginaInicio = () => {
                         <Funcionalidad icon="file-text" texto="Extraer texto" />
                     </div>
                     <div className="col-md-6">
-                        <Funcionalidad icon="log-out" texto="Cerrar sesión" />
+                        <Funcionalidad icon="log-out" texto="Cerrar sesión" onClick={()=>handleLogout()} />
                     </div>
                 </div>
             </div>
