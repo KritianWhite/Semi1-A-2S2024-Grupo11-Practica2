@@ -9,6 +9,9 @@ import RegistroUsuario from './pages/RegistroUsuario';
 import PaginaInicio from './pages/PaginaInicio';
 import ConfiguracionCuenta from './pages/ConfiguracionCuenta';
 import VistaAlbum from './pages/VistaAlbum';
+import AlbumEdit from './pages/AlbumEdit';
+import CargarImagen from './pages/CargarImagen';
+import ExtracionTexto from './pages/ExtracionTexto';
 
 function App() {
 
@@ -41,6 +44,9 @@ function Layout({ isAuthenticated, setIsAuthenticated }) {
               <Route path="/pagina-inicio" element={<PaginaInicio showNavBar={true}/>} />
               <Route path="/configuracion-cuenta" element={<ConfiguracionCuenta showNavBar={true} />} />
               <Route path="/vista-album" element={<VistaAlbum showNavBar={true}/>} />
+              <Route path="/editar-album" element={<AlbumEdit showNavBar={true}/>} />
+              <Route path="/cargar-imagen" element={<CargarImagen showNavBar={true}/>} />
+              <Route path="/extraccion-texto" element={<ExtracionTexto showNavBar={true}/>} />
               {/* Otras rutas que necesitan autenticación */}
               <Route path="*" element={<Navigate to="/inicio-sesion" />} />
             </Routes>

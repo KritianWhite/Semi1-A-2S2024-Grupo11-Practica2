@@ -1,11 +1,6 @@
 import React from 'react';
 
-function Navbar({showNavBar}) {
-
-    if (!showNavBar) {
-        return null;
-    }
-
+function Navbar() {
     
     return (
         <>
