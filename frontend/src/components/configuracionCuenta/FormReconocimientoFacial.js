@@ -25,7 +25,7 @@ const FormReconocimientoFacial = ({ usuario, handleClose, handleImageChangeParen
     const handleSubmit = (e) => {
         e.preventDefault();
         // Lógica para enviar la imagen al backend
-        if(usuario && image) {
+        if (usuario && image) {
             axiosRegistrarRostro();
         } else {
             console.error('faltan campos por rellenar' + usuario);
@@ -90,7 +90,7 @@ const FormReconocimientoFacial = ({ usuario, handleClose, handleImageChangeParen
                 </Tab>
                 <Tab eventKey="camara" title="Camara">
                     <Row>
-                        <CameraCapture setImageParent={setImage} />
+                        <CameraCapture setImageParent={setImage} buttonText={"Tomar Foto"} />
                     </Row>
                 </Tab>
             </Tabs>

@@ -2,6 +2,7 @@ import * as bcrypt from "bcrypt";
 import { consult } from "../database/database.mjs";
 import config from "../config.mjs";
 import { uploadImageS3, deleteObjectS3 } from "../aws/s3.mjs";
+import { compareFaces } from "../aws/rekognition.mjs";
 
 const register = async (req, res) => {
     const { username, email, password, profileImage } = req.body;
@@ -252,10 +253,73 @@ const toggleFaceId = async (req, res) => {
     }
 }
 
+const loginFaceId = async (req, res) => {
+    try{
+        const {username, faceImage} = req.body;
+        if(username === undefined || faceImage === undefined){
+            return res.status(400).json({status: 400, message: "Faltan campos por rellenar"});
+        }
+
+        //validamos que el usuario exista ya sea nombre de usuario o correo
+        const resultUser = await consult(`select * from usuario where nombre='${username}' or correo='${username}';`);
+
+        if(resultUser[0].result.length === 0){
+            return res.status(404).json({status: 404, message: "Usuario no encontrado"});
+        }
+
+        //validamos que el usuario tenga face_id_habilitado
+        const user = resultUser[0].result[0];
+        if(user.face_id_habilitado === 0){
+            return res.status(401).json({status: 401, message: "El usuario no tiene reconocimiento facial habilitado"});
+        }
+
+        //como si está habilitado obtenemos el rostro registrado
+        const resultFace = await consult(`select * from rostros_usuarios where usuario_id=${user.id};`);
+
+        if(resultFace[0].result.length === 0){
+            return res.status(404).json({status: 404, message: "El usuario no tiene un rostro configurado"});
+        }
+
+        const face = resultFace[0].result[0];
+
+        //convertimos la imagen de base64 a buffer
+
+        const base64Data = faceImage.replace(/^data:image\/\w+;base64,/, "");
+        const buff = Buffer.from(base64Data, 'base64');
+
+        //comparamos las imagenes
+        const response = await compareFaces(buff, face.key_s3);
+
+        if(response === null){
+            return res.status(500).json({status: 500, message: "Error al validar rostro"});
+        }
+
+        console.log(response);
+
+        if(response.FaceMatches.length > 0){
+            const data_user = {
+                id: user.id,
+                username: user.nombre,
+                email: user.correo,
+                url_foto: user.url_foto,
+                face_id_habilitado: Boolean(user.face_id_habilitado)
+            };
+            return res.status(200).json({status: 200, message: "Usuario logueado correctamente", data_user: data_user});
+        }
+
+        return res.status(401).json({status: 401, message: "Rostro no reconocido"});
+
+    }catch(error){
+        console.error(error);
+        return res.status(500).json({status: 500, message: "Error al iniciar sesión con reconocimiento facial"});
+    }
+};
+
 export const user = {
     register,
     login,
     registrarRostro,
     obtenerDatosReconocimientoFacial,
-    toggleFaceId
+    toggleFaceId,
+    loginFaceId
 };

@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-const CameraCapture = ({setImageParent}) => {
+const CameraCapture = ({setImageParent, buttonText}) => {
   const [showCamera, setShowCamera] = useState(false);
-  const [image, setImage] = useState(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -20,7 +19,7 @@ const CameraCapture = ({setImageParent}) => {
         console.error('Error accessing camera:', err);
       });
   };
-
+  
   // Función para capturar la imagen
   const captureImage = () => {
     const canvas = canvasRef.current;
@@ -44,11 +43,11 @@ const CameraCapture = ({setImageParent}) => {
 
   return (
     <div className="text-center">
-      <Button variant="primary" onClick={openCamera}>Tomar Foto</Button>
+      <Button variant="dark" onClick={openCamera}>{buttonText}</Button>
 
       <Modal show={showCamera} onHide={() => setShowCamera(false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Tomar Foto</Modal.Title>
+          <Modal.Title>{buttonText}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="camera-container" style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>

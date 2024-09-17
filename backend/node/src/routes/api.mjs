@@ -15,5 +15,6 @@ router.post("/user/login_credentials", user.login);
 router.post("/user/register_face", user.registrarRostro);
 router.get("/user/face_id_data/:id", user.obtenerDatosReconocimientoFacial);
 router.put('/user/toggle_face_id', user.toggleFaceId);
+router.post('/user/compare_faces', user.loginFaceId );
 
 export default router;

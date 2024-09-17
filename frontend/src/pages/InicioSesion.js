@@ -10,7 +10,6 @@ import ReconocimientoFacial from '../components/inicioSesion/ReconocimientoFacia
 const InicioSesion = ({ setIsAuthenticated }) => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
-    const [isCameraActive, setIsCameraActive] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -52,10 +51,6 @@ const InicioSesion = ({ setIsAuthenticated }) => {
         //setError('Credenciales incorrectas. Por favor, inténtelo de nuevo.');
     };
 
-    const handleFacialRecognition = () => {
-        setIsCameraActive(true);
-        console.log('Iniciando reconocimiento facial...');
-    };
 
     return (
         <>
@@ -81,7 +76,7 @@ const InicioSesion = ({ setIsAuthenticated }) => {
                         />
                     </div>
                     <div className="tab-pane fade" id="facial" role="tabpanel">
-                        <ReconocimientoFacial isCameraActive={isCameraActive} onFacialRecognition={handleFacialRecognition} />
+                        <ReconocimientoFacial setIsAuthenticated={setIsAuthenticated}/>
                     </div>
                 </div>
             </div>

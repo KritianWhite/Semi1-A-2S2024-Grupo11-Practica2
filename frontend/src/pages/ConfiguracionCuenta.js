@@ -16,7 +16,6 @@ const ConfiguracionCuenta = () => {
     const [showModalFaceRecognition, setShowModalFaceRecognition] = useState(false);
     const navigate = useNavigate();
 
-
     useEffect(() => {
         // Lógica para cargar la información del usuario
         const data_user = getLocalStorage('data_user');
@@ -25,7 +24,7 @@ const ConfiguracionCuenta = () => {
         }
         setUsuario(data_user);
         axiosFaceIdData(data_user);
-    }, []);
+    }, [navigate]);
 
     const axiosFaceIdData = async (data_user) => {
         // Lógica para cargar la información del reconocimiento facial
@@ -114,6 +113,7 @@ const ConfiguracionCuenta = () => {
             <div className="col-md-8">
                 <h1 className="text-center mb-6">Configuración de la Cuenta</h1>
 
+                <a href="/pagina-inicio" className="d-block mt-2 mb-2 text-left">Regresar</a>
                 <InformacionPersonal
                     usuario={usuario}
                     handleInputChange={handleInputChange}

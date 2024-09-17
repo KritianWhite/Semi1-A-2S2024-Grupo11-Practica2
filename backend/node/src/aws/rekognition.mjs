@@ -1,7 +1,7 @@
 import { RekognitionClient, CompareFacesCommand} from '@aws-sdk/client-rekognition';
 import config from '../config.mjs';
 
-const compareFaces = async (buff, id) => {
+const compareFaces = async (buff, path) => {
 
     const client = new RekognitionClient({
         region: config.rekognition.region,
@@ -15,12 +15,13 @@ const compareFaces = async (buff, id) => {
         SourceImage: {  //imagen que el usuario sube para comparar
             Bytes: buff
         },
-        TargetImage: { // imagen que se encuentra en S3 de la perona como referencia
+        TargetImage: { // imagen que se encuentra en S3 del rostro como referencia
             S3Object: {
                 Bucket: config.bucket,
-                Name: id    //id de la imagen en S3 
+                Name: path    //id de la imagen en S3 
             }
-        }
+        },
+        SimilarityThreshold: 90 //umbral de similitud
     });
 
     try {
