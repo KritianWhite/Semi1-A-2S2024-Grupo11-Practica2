@@ -34,7 +34,7 @@ const InformacionPersonal = ({ usuario, handleInputChange, handleGuardarCambios 
                         className="form-control"
                         id="nombre"
                         name="nombre"
-                        value={usuario.nombre}
+                        value={usuario.username}
                         onChange={handleInputChange}
                         disabled={!isEditing} // Se habilita solo en modo edición
                     />

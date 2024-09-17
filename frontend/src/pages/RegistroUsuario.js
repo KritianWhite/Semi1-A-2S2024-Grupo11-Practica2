@@ -13,7 +13,7 @@ const RegistroUsuario = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        profileImage: null,
+        profileImage: undefined,
         nameImage: ''
     });
     const [error, setError] = useState('');
