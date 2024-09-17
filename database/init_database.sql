@@ -36,16 +36,15 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `photobucket`.`rostos_usuarios`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `photobucket`.`rostos_usuarios` ;
+DROP TABLE IF EXISTS `photobucket`.`rostros_usuarios` ;
 
-CREATE TABLE IF NOT EXISTS `photobucket`.`rostos_usuarios` (
+CREATE TABLE IF NOT EXISTS `photobucket`.`rostros_usuarios` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `usuario_id` INT NOT NULL,
-  `aws_face_id` VARCHAR(255) NOT NULL COMMENT 'ID de reconocimiento facial de AWS Rekognition',
-  `url_foto_s3` VARCHAR(255) NOT NULL,
+  `key_s3` VARCHAR(255) NOT NULL COMMENT 'ID de reconocimiento facial de AWS Rekognition',
   PRIMARY KEY (`id`),
-  INDEX `fk_rostos_usuarios_usuario_idx` (`usuario_id` ASC) VISIBLE,
-  CONSTRAINT `fk_rostos_usuarios_usuario`
+  INDEX `fk_rostros_usuarios_usuario_idx` (`usuario_id` ASC) VISIBLE,
+  CONSTRAINT `fk_rostros_usuarios_usuario`
     FOREIGN KEY (`usuario_id`)
     REFERENCES `photobucket`.`usuario` (`id`)
     ON DELETE NO ACTION
