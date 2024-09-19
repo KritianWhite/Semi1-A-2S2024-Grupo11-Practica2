@@ -1,6 +1,9 @@
 import config from "./../config.mjs";
-import { createConnection, createPool } from "mysql2/promise";
+import { createPool } from "mysql2/promise";
 
+//para generar id unicos uuidv4
+
+// Configuración del pool de conexiones
 const dbConfig = {
   host: config.host,
   port: config.port,
@@ -16,72 +19,41 @@ const dbConfig = {
   keepAliveInitialDelay: 0,
 };
 
-async function queryWithPool(pool, query) {
+// Crear una única instancia del pool de conexiones
+const pool = createPool(dbConfig);
+
+async function queryWithPool(query) {
   const connection = await pool.getConnection();
   try {
     const [consulta] = await connection.query(query);
-    const results = {
-        "status": 200,
-        "message": "Consulta exitosa",
-        "result": consulta,
-    }
-    return results;
+    return {
+      "status": 200,
+      "message": "Consulta exitosa",
+      "result": consulta,
+    };
   } catch (error) {
-    const results = {
-        "status": 500,
-        "message": error.message,
-        "result": null,
-    }
-    return results;
+    return {
+      "status": 500,
+      "message": error.message,
+      "result": null,
+    };
   } finally {
     connection.release(); // Asegurarse de liberar la conexión
   }
 }
 
 async function consult(texto) {
-  const pool = createPool(dbConfig);
   const queries = Array(1).fill(texto);
 
   const result = await Promise.all(
-    queries.map(async (query) => await queryWithPool(pool, query))
+        queries.map(async (query) => await queryWithPool(query))
   );
-
-  await pool.end();
 
   return result;
 }
 
-export { consult };
-
-/*async function queryWithoutPool(dbConfig, query) {
-  const connection = await createConnection(dbConfig);
-  await connection.query(query);
-  await connection.end();
+async function closePool() {
+  await pool.end();
 }
 
-async function benchmark() {
-  const pool = createPool(dbConfig);
-  const queries = Array(100).fill("SELECT COUNT(*) FROM posts;");
-
-  // Benchmark using connection pool - START
-  let start = performance.now();
-  await Promise.all(
-    queries.map(async (query) => await queryWithPool(pool, query))
-  );
-
-  let end = performance.now();
-  console.log(`Total time with connection pool: ${end - start} ms`);
-  // Benchmark using connection pool - END
-
-  // Benchmark without using a connection pool - START
-  start = performance.now();
-  for (let query of queries) {
-    await queryWithoutPool(dbConfig, query);
-  }
-  end = performance.now();
-  console.log(`Total time without connection pool: ${end - start} ms`);
-  // Benchmark without using a connection pool - END
-
-  await pool.end(); // Close all connections in the pool
-}
-*/
+export { consult, closePool };
