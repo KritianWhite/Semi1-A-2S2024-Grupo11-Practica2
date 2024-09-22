@@ -110,8 +110,8 @@ const ConfiguracionCuenta = () => {
 
     return (
         <>
-            <div className="col-md-8">
-                <h1 className="text-center mb-6">Configuración de la Cuenta</h1>
+            <div className="col-md-8 my-4">
+                <h1 className="text-center">Configuración de la Cuenta</h1>
 
                 <a href="/pagina-inicio" className="d-block mt-2 mb-2 text-left">Regresar</a>
                 <InformacionPersonal

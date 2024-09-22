@@ -101,7 +101,7 @@ const RegistroUsuario = () => {
 
     return (
         <>
-            <div className="card p-4 shadow-lg" style={{ maxWidth: '500px', width: '100%' }}>
+            <div className="card p-4 shadow-lg mx-auto" style={{ maxWidth: '600px' }}>
                 <h1 className="text-center mb-4">Registro de Usuario</h1>
                 {error && <div className="alert alert-danger">{error}</div>}
                 <FormularioRegistro

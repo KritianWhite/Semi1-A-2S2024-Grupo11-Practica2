@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
 const AddAlbumDialog = ({ isOpen, onClose, newAlbumName, setNewAlbumName, handleAddAlbum }) => {
+    
     return (
         <Modal show={isOpen} onHide={onClose}>
             <Modal.Header closeButton>
