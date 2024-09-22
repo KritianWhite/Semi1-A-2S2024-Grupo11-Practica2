@@ -1,58 +1,83 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import AlbumCard from "../components/editarAlbum/AlbumCard";
 import AddAlbumDialog from "../components/editarAlbum/AddAlbumDialog";
 import EditAlbumDialog from "../components/editarAlbum/EditAlbumDialog";
 import DeleteAlbumDialog from "../components/editarAlbum/DeleteAlbumDialog";
+import Alertas2 from "../components/Alertas2";
+import { getLocalStorage } from "../session";
+import {
+  AlbumAddApi,
+  AlbumGetApi,
+  AlbumUpdateApi,
+  AlbumDeleteApi,
+} from "../Api/AlbumApi";
 
 // Datos de ejemplo (en una aplicación real, esto vendría de una API o base de datos)
-const initialAlbums = [
+/*const initialAlbums = [
   { id: 1, name: "Vacaciones 2023", imageCount: 15 },
   { id: 2, name: "Cumpleaños", imageCount: 8 },
   { id: 3, name: "Mascotas", imageCount: 20 },
-];
+];*/
 
 const AlbumEdit = () => {
-  const [albums, setAlbums] = useState(initialAlbums);
+  const [albums, setAlbums] = useState([]);
+  useEffect(() => {
+    AlbumGetApi().then((response) => {
+      setAlbums(response.albums);
+    });
+  }, []);
+
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [newAlbumName, setNewAlbumName] = useState("");
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+  const data_user = getLocalStorage("data_user");
 
   const handleAddAlbum = () => {
-    if (newAlbumName.trim() !== "") {
-      const newAlbum = {
-        id: albums.length + 1,
-        name: newAlbumName.trim(),
-        imageCount: 0,
-      };
-      setAlbums([...albums, newAlbum]);
-      setNewAlbumName("");
-      setIsAddDialogOpen(false);
-    }
+    AlbumAddApi(data_user.id, newAlbumName)
+      .then((response) => {
+        Alertas2.showSuccess("Álbum agregado correctamente");
+        setAlbums(response);
+        setNewAlbumName("");
+        setIsAddDialogOpen(false);
+      })
+      .catch((error) => {
+        Alertas2.showError("Error al agregar el álbum");
+        console.error(error);
+      });
   };
 
   const handleEditAlbum = () => {
     if (selectedAlbum && newAlbumName.trim() !== "") {
-      const updatedAlbums = albums.map((album) =>
-        album.id === selectedAlbum.id
-          ? { ...album, name: newAlbumName.trim() }
-          : album
-      );
-      setAlbums(updatedAlbums);
-      setNewAlbumName("");
-      setIsEditDialogOpen(false);
+      AlbumUpdateApi(selectedAlbum.id, newAlbumName, data_user.id)
+        .then((response) => {
+          Alertas2.showSuccess("Álbum editado correctamente");
+          setAlbums(response);
+
+          setNewAlbumName("");
+          setIsEditDialogOpen(false);
+        })
+        .catch((error) => {
+          Alertas2.showError("Error al editar el álbum");
+          console.error(error);
+        });
     }
   };
 
   const handleDeleteAlbum = () => {
     if (selectedAlbum) {
-      const updatedAlbums = albums.filter(
-        (album) => album.id !== selectedAlbum.id
-      );
-      setAlbums(updatedAlbums);
-      setIsDeleteDialogOpen(false);
+      AlbumDeleteApi(selectedAlbum.id, data_user.id)
+        .then((response) => {
+          Alertas2.showSuccess("Álbum eliminado correctamente");
+          setAlbums(response);
+          setIsDeleteDialogOpen(false);
+        })
+        .catch((error) => {
+          Alertas2.showError("Error al eliminar el álbum");
+          console.error(error);
+        });
     }
   };
 

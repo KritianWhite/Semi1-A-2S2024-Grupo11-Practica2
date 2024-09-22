@@ -45,7 +45,7 @@ router.post("/image/extract-text", text.returntext);
 // Rutas de album
 router.post("/album/add", Album.Add);
 router.post("/album/get", Album.Get);
-router.put("/album/update", Album.Update);
-router.delete("/album/delete", Album.Delete);
+router.post("/album/update", Album.Update);
+router.post("/album/delete", Album.Delete);
 
 export default router;
