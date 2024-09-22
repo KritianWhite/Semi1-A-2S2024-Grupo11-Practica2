@@ -1,9 +1,29 @@
 import {Router} from 'express';
 import {user} from '../controllers/user.mjs';
 import {text} from '../controllers/text-image.mjs';
+import {Album} from '../controllers/album.mjs';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 const router = Router();
 
+//esto para guardar el archivo temporalmente
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = 'uploads/';
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
 
 /****Comprobación***/
 router.get("/check", async (req, res) => {
@@ -21,5 +41,11 @@ router.post('/user/compare_faces', user.loginFaceId );
 
 // Rutas de imagen
 router.post("/image/extract-text", text.returntext);
+
+// Rutas de album
+router.post("/album/add", Album.Add);
+router.post("/album/get", Album.Get);
+router.put("/album/update", Album.Update);
+router.delete("/album/delete", Album.Delete);
 
 export default router;
