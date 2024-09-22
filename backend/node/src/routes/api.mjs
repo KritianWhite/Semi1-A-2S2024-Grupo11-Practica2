@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {user} from '../controllers/user.mjs';
+import {text} from '../controllers/text-image.mjs';
 
 const router = Router();
 
@@ -16,5 +17,9 @@ router.post("/user/register_face", user.registrarRostro);
 router.get("/user/face_id_data/:id", user.obtenerDatosReconocimientoFacial);
 router.put('/user/toggle_face_id', user.toggleFaceId);
 router.post('/user/compare_faces', user.loginFaceId );
+
+
+// Rutas de imagen
+router.post("/image/extract-text", text.returntext);
 
 export default router;
